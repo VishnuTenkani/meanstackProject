@@ -1,0 +1,15 @@
+mean stak project notes:
+
+node.js server run cmnd------------->
+npm run start:server
+
+how to open mongodb shell?
+open https://cloud.mongodb.com then click connect tab click connect with mongoshell download mongoshell
+extract download file and open run command prompt open path in com prompt 
+ex : f:\mongodb\bin
+and copy the URL encode in mongodb.com 
+stream it and enter password and click enter stream clusters 
+and then switch to  database by using use command;
+ex: use <database name>
+run help in command prompt
+it will show you how to run command in schemas.
