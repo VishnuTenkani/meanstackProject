@@ -13,3 +13,6 @@ and then switch to  database by using use command;
 ex: use <database name>
 run help in command prompt
 it will show you how to run command in schemas.
+
+for file upload in node js need to install package multer
+here command -- npm install --save multer

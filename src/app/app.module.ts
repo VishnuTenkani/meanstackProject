@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatInputModule,MatCardModule, MatToolbarModule, MatButtonModule, MatExpansionModule, MatAccordion} from '@angular/material'
+import {MatInputModule,MatCardModule, MatToolbarModule, MatButtonModule, MatExpansionModule, MatAccordion, MatProgressSpinnerModule} from '@angular/material'
 import { PostCreateComponent } from './component/post-create/post-create.component';
 import { PostHeaderComponent } from './component/post-header/post-header.component';
 import { PostListComponent } from './component/post-list/post-list.component';
@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatToolbarModule,
     MatButtonModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

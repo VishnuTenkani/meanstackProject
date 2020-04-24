@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Subject } from "rxjs";
 import { Post } from './component/post.model';
 import { map } from 'rxjs/operators'
+import { Router } from '@angular/router';
 
 
 
@@ -11,7 +12,7 @@ export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router:Router) {}
 
   getPosts() {
     this.http
@@ -41,19 +42,33 @@ export class PostsService {
     return this.postsUpdated.asObservable();
   }
 
-  addPost(title: string, content: string) {
-    const posted: Post = { id: null, title: title, content: content };
-    this.http.post<{ message: string, postId: string }>("http://localhost:3000/api/posts", posted)
+  addPost(title: string, content: string,image : File) {
+    //const posted: Post = { id: null, title: title, content: content };
+    const postDate = new FormData();
+    postDate.append("title",title);
+    postDate.append("content",content);
+    postDate.append("image",image,title)
+    this.http.post<{ message: string, postId: string }>("http://localhost:3000/api/posts", postDate)
       .subscribe(responseData => {
         const id = responseData.postId;
-        posted.id = id;
-        this.posts.push(posted);
+        //posted.id = id;
+        //this.posts.push(posted);
         console.log(this.posts);
-        
-        
         this.postsUpdated.next([...this.posts])
         console.log(this.postsUpdated);
+        this.router.navigate(["/"]);
       });
+  }
+  updatePost(postId: string, title: string, content: string) {
+    const posted: Post = { id: postId, title: title, content: content };
+    this.http.put("http://localhost:3000/api/posts/" + postId, posted).subscribe((respone) => {
+      const updatedPosts = [...this.posts];
+      const oldPostIndex = updatedPosts.findIndex(p => p.id == posted.id);
+      updatedPosts[oldPostIndex] = posted;
+      this.posts = updatedPosts;
+      this.postsUpdated.next([...this.posts])
+      this.router.navigate(["/"]);
+    })
   }
 
   deletePost(postId:string){
