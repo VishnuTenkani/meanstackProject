@@ -23,13 +23,14 @@ export class PostsService {
           return{
             title:p.title,
             content:p.content,
-            id:p._id
+            id:p._id,
+            imagePath:p.imagePath
           }
         })
 
       }))
       .subscribe(postDataTransfermed => {
-        //console.log(postDataTransfermed);
+        console.log(postDataTransfermed);
         
         this.posts = postDataTransfermed;
         this.postsUpdated.next([...this.posts]);
@@ -48,11 +49,16 @@ export class PostsService {
     postDate.append("title",title);
     postDate.append("content",content);
     postDate.append("image",image,title)
-    this.http.post<{ message: string, postId: string }>("http://localhost:3000/api/posts", postDate)
+    this.http.post<{ message: string, post: Post }>("http://localhost:3000/api/posts", postDate)
       .subscribe(responseData => {
-        const id = responseData.postId;
+        const post:Post={
+          id: responseData.post.id,
+          title:responseData.post.title,
+          content:responseData.post.content,
+          imagePath:responseData.post.imagePath
+        } ;
         //posted.id = id;
-        //this.posts.push(posted);
+        this.posts.push(post);
         console.log(this.posts);
         this.postsUpdated.next([...this.posts])
         console.log(this.postsUpdated);
@@ -60,7 +66,7 @@ export class PostsService {
       });
   }
   updatePost(postId: string, title: string, content: string) {
-    const posted: Post = { id: postId, title: title, content: content };
+    const posted: Post = { id: postId, title: title, content: content,imagePath:null };
     this.http.put("http://localhost:3000/api/posts/" + postId, posted).subscribe((respone) => {
       const updatedPosts = [...this.posts];
       const oldPostIndex = updatedPosts.findIndex(p => p.id == posted.id);
@@ -81,7 +87,7 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{ _id: string; title: string; content: string }>(
+    return this.http.get<{ _id: string; title: string; content: string,imagePath:string }>(
       "http://localhost:3000/api/posts/" + id
     );
   }
