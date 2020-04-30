@@ -1,5 +1,5 @@
 <mat-spinner strokeWidth="5" [diameter]="50" *ngIf="isLoading"></mat-spinner>
-<mat-card>
+<mat-card [class.dark-theme]="hasToggledTheme">
     <form [formGroup]="postForm" (submit)="onSavePost()"   *ngIf="!isLoading">
       <mat-form-field>
         <input

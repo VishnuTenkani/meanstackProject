@@ -14,10 +14,11 @@ export class PostsService {
 
   constructor(private http: HttpClient,private router:Router) {}
 
-  getPosts() {
+  getPosts(postPerPage,currentPage) {
+    let queryParam=`?pagesize=${postPerPage}&page=${currentPage}`
     this.http
       .get<{ message: string; post: any }>(
-        "http://localhost:3000/api/posts"
+        "http://localhost:3000/api/posts" + queryParam
       ).pipe(map((postData)=>{
         return postData.post.map(p =>{
           return{
@@ -65,12 +66,25 @@ export class PostsService {
         this.router.navigate(["/"]);
       });
   }
-  updatePost(postId: string, title: string, content: string) {
-    const posted: Post = { id: postId, title: title, content: content,imagePath:null };
+  updatePost(postId: string, title: string, content: string, image:File | string) {
+    let posted:Post | FormData;
+    if(typeof(image) === "object"){
+      posted= new FormData();
+      posted.append("id",postId)
+      posted.append("title",title);
+      posted.append("content",content);
+      posted.append("image",image,title)
+
+    }else{
+       posted = { id: postId, title: title, content: content,imagePath:image };
+    }
     this.http.put("http://localhost:3000/api/posts/" + postId, posted).subscribe((respone) => {
       const updatedPosts = [...this.posts];
-      const oldPostIndex = updatedPosts.findIndex(p => p.id == posted.id);
-      updatedPosts[oldPostIndex] = posted;
+      const oldPostIndex = updatedPosts.findIndex(p => p.id == postId);
+      const post:Post={
+        id: postId, title: title, content: content,imagePath:""
+      }
+      updatedPosts[oldPostIndex] = post;
       this.posts = updatedPosts;
       this.postsUpdated.next([...this.posts])
       this.router.navigate(["/"]);

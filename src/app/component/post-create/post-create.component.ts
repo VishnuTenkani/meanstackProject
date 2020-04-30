@@ -50,6 +50,7 @@ export class PostCreateComponent implements OnInit {
             content:this.post.content,
             image:this.post.imagePath
           })
+         // this.imagePreview = this.post.imagePath;
           
         });
       } else {
@@ -84,7 +85,8 @@ export class PostCreateComponent implements OnInit {
       this.postsService.updatePost(
         this.postId,
         this.postForm.value.title,
-        this.postForm.value.content
+        this.postForm.value.content,
+        this.postForm.value.image,
       );
     }
     //form.resetForm();
