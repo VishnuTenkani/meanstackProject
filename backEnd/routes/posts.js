@@ -79,14 +79,19 @@ router.post("/api/posts", multer({storage:fileStorage}).single("image"),(req, re
     const pageSize = +req.query.pagesize;
     const Currentpage = +req.query.page;
     const postQuery = Post.find();
+    let fetchedPost;
     if(pageSize && Currentpage){
       postQuery.skip(pageSize * (Currentpage - 1))
       .limit(pageSize);
     }
     postQuery.then(documents => {
+      fetchedPost = documents
+     return Post.count()
+    }).then(count =>{
       res.status(200).json({
         message: "Posts fetched successfully!",
-        post: documents
+        post: fetchedPost,
+        maxPosts:count
       });
     });
   });

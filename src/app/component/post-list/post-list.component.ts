@@ -3,6 +3,7 @@ import { PostsService } from 'src/app/post-service.service';
 import { Subscription } from 'rxjs';
 import { Post } from '../post.model';
 import { PageEvent } from '@angular/material';
+import { post } from 'selenium-webdriver/http';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { PageEvent } from '@angular/material';
   providers:[PostsService]
 })
 export class PostListComponent implements OnInit {
-  totalPosts=10;
+  totalPosts=0;
   postPerPage=2;
   currentPage=1;
   pageSizeOptions=[1,2,5,10]
@@ -27,15 +28,24 @@ export class PostListComponent implements OnInit {
     this.isLoading = true;
     this.postServ.getPosts(this.postPerPage,this.currentPage);
     this.postsSub = this.postServ.getPostUpdateListener()
-      .subscribe((posts: Post[]) => {
+      .subscribe((postsData:{posts: Post[],maxPostCout:number}) => {
         this.isLoading= false;
-        this.posts = posts;
+        this.totalPosts=postsData.maxPostCout;
+        this.posts = postsData.posts;
+      },err=>{
+        console.log(err);
+        
       });
   }
 
 
   onDelete(id:string){
-    this.postServ.deletePost(id);
+    this.postServ.deletePost(id).subscribe(()=>{
+      this.postServ.getPosts(this.postPerPage,this.currentPage);
+    },err=>{
+      console.log(err);
+      
+    });
 
   }
   ngOnDestroy() {
@@ -44,7 +54,7 @@ export class PostListComponent implements OnInit {
 
   onChangePageSize(event:PageEvent)
   {
-    console.log(event);
+    //console.log(event);
     this.currentPage = event.pageIndex+1;
     this.postPerPage = event.pageSize;
 
