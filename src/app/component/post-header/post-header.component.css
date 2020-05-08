@@ -11,3 +11,6 @@ ul{
 .spacer{
     flex: 1 1 auto;
 }
+ul{
+    display: flex;
+}

@@ -2,6 +2,7 @@ const express = require("express");
 const Post = require("../model/post");
 const router = express.Router();
 const multer = require("multer");
+const checkAuth = require("../middleware/check-auth")
 
 const MIME_TYPE_MAP={
   "image/png":"png",
@@ -28,7 +29,7 @@ const fileStorage = multer.diskStorage({
   }
 })
 
-router.post("/api/posts", multer({storage:fileStorage}).single("image"),(req, res, next) => {
+router.post("/api/posts", checkAuth, multer({storage:fileStorage}).single("image"),(req, res, next) => {
   const url= req.protocol + '://' + req.get("host");
     const post = new Post({
       title: req.body.title,
@@ -56,7 +57,7 @@ router.post("/api/posts", multer({storage:fileStorage}).single("image"),(req, re
     });
   });
   
-  router.put("/api/posts/:id",multer({storage:fileStorage}).single("image"),(req, res, next) =>{
+  router.put("/api/posts/:id",checkAuth,multer({storage:fileStorage}).single("image"),(req, res, next) =>{
     let imagePath = req.body.imagePath;
     if(req.file){
       const url= req.protocol + '://' + req.get("host");
@@ -96,7 +97,7 @@ router.post("/api/posts", multer({storage:fileStorage}).single("image"),(req, re
     });
   });
   
-  router.delete("/api/posts/:id", (req, res, next) => {
+  router.delete("/api/posts/:id",checkAuth ,(req, res, next) => {
     Post.deleteOne({ _id: req.params.id }).then(result => {
       //console.log(result);
       res.status(200).json({ message: "Post deleted!" });

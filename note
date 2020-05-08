@@ -16,3 +16,13 @@ it will show you how to run command in schemas.
 
 for file upload in node js need to install package multer
 here command -- npm install --save multer
+
+for unique email id stores in db use the bellow 3rd party package
+--npm install --save mongoose-unique-validator
+
+
+for password encryption install bellow package--
+npm install --save bcrypt
+
+for JWT token install  bellow package
+npm install -- save jsonwebtoken
