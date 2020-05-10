@@ -25,13 +25,14 @@ export class PostsService {
             title:p.title,
             content:p.content,
             id:p._id,
-            imagePath:p.imagePath
+            imagePath:p.imagePath,
+            creator:p.creator
           }
         }),maxPosts:postData.maxPosts}
 
       }))
       .subscribe(postDataTransfermedData => {
-        console.log(postDataTransfermedData.post);
+        console.log(postDataTransfermedData);
         
         this.posts = postDataTransfermedData.post;
         this.postsUpdated.next({posts:[...this.posts],maxPostCout:postDataTransfermedData.maxPosts});
@@ -76,7 +77,7 @@ export class PostsService {
       posted.append("image",image,title)
 
     }else{
-       posted = { id: postId, title: title, content: content,imagePath:image };
+       posted = { id: postId, title: title, content: content,imagePath:image,creator:null };
     }
     this.http.put("http://localhost:3000/api/posts/" + postId, posted).subscribe((respone) => {
       // const updatedPosts = [...this.posts];
@@ -102,7 +103,7 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{ _id: string; title: string; content: string,imagePath:string }>(
+    return this.http.get<{ _id: string; title: string; content: string,imagePath:string,creator:string }>(
       "http://localhost:3000/api/posts/" + id
     );
   }

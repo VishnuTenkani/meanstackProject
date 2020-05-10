@@ -34,8 +34,11 @@ router.post("/api/posts", checkAuth, multer({storage:fileStorage}).single("image
     const post = new Post({
       title: req.body.title,
       content: req.body.content,
-      imagePath: url + '/images/' + req.file.filename, 
+      imagePath: url + '/images/' + req.file.filename,
+      creator:req.userData.userId 
     });
+    //console.log(req.userData);
+    //return res.status(200).json({});
     post.save().then(createdPost => {
       res.status(201).json({
         message: "Post added successfully",
@@ -67,7 +70,8 @@ router.post("/api/posts", checkAuth, multer({storage:fileStorage}).single("image
       _id:  req.body.id,
       title: req.body.title,
       content: req.body.content,
-      imagePath: imagePath
+      imagePath: imagePath,
+      creator:req.userData.userId,
     });
     Post.updateOne({_id:  req.params.id},post).then(result =>{
       //console.log(post);

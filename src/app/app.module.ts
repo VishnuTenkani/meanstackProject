@@ -12,7 +12,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { authInterceptor } from './auth/auth-interceptor';
+import { AuthInterceptor } from './auth/auth-interceptor';
+
+
 
 @NgModule({
   declarations: [
@@ -43,7 +45,7 @@ import { authInterceptor } from './auth/auth-interceptor';
 
   ],
   providers: [{
-    provide:HTTP_INTERCEPTORS,useClass:authInterceptor, multi:true
+    provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor , multi:true
   }],
   bootstrap: [AppComponent]
 })

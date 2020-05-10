@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Post } from '../post.model';
 import { PageEvent } from '@angular/material';
 import { post } from 'selenium-webdriver/http';
+import { AuthServiceService } from 'src/app/auth/auth-service.service';
 
 
 @Component({
@@ -16,8 +17,11 @@ export class PostListComponent implements OnInit {
   totalPosts=0;
   postPerPage=2;
   currentPage=1;
-  pageSizeOptions=[1,2,5,10]
-  constructor(private postServ:PostsService) {
+  pageSizeOptions=[1,2,5,10];
+  userId:string;
+  private authListnerSubs:Subscription;
+  isUserAuthenticated = false;
+  constructor(private postServ:PostsService, private authSrv:AuthServiceService) {
     
 
    }
@@ -26,6 +30,7 @@ export class PostListComponent implements OnInit {
    isLoading = false;
   ngOnInit() {
     this.isLoading = true;
+    this.userId = this.authSrv.getUserId();
     this.postServ.getPosts(this.postPerPage,this.currentPage);
     this.postsSub = this.postServ.getPostUpdateListener()
       .subscribe((postsData:{posts: Post[],maxPostCout:number}) => {
@@ -34,8 +39,12 @@ export class PostListComponent implements OnInit {
         this.posts = postsData.posts;
       },err=>{
         console.log(err);
-        
       });
+      this.isUserAuthenticated = this.authSrv.getAuth();
+      this.authListnerSubs = this.authSrv.getAuthStatusListner().subscribe((isAuth)=>{
+        this.isUserAuthenticated = isAuth;
+        this.userId = this.authSrv.getUserId();
+      })
   }
 
 
