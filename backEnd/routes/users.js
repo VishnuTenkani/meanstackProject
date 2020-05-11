@@ -16,7 +16,7 @@ router.post("/signup",(req,res,next)=>{
             })
         }).catch((err)=>{
             res.status(501).json({
-                error:err,
+                message:"Email id already exists!",
             })
         })
     })

@@ -20,6 +20,8 @@ export class AuthServiceService {
       .post("http://localhost:3000/api/user/signup", authData)
       .subscribe((Response) => {
         console.log(Response);
+      },err=>{
+        console.log(err)
       });
   }
   login(email: string, password: string) {
