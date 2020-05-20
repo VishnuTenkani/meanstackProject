@@ -45,6 +45,7 @@ exports.loginUser = (req, res, next)=>{
            token:token,
            expiresIn:3600,
            userId:fectchedUser._id,
+           likevalue:fectchedUser.likevalue
        })
     }).catch((err)=>{
         return res.status(401).json({

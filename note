@@ -26,3 +26,6 @@ npm install --save bcrypt
 
 for JWT token install  bellow package
 npm install -- save jsonwebtoken
+
+
+https://github.com/gugui3z24/MEAN-Stack-With-Angular-2-Tutorial/blob/like-dislike/routes/blogs.js

@@ -1,4 +1,5 @@
 const Post = require("../model/post");
+const user = require("../model/user");
 
 exports.createPost = (req, res, next) => {
     const url= req.protocol + '://' + req.get("host");
@@ -49,6 +50,71 @@ exports.updatePosts = (req, res, next) =>{
       res.status(200).json({ message: "Post update successful!" });
     })
   }
+
+  exports.like = (req,res,next)=>{
+    
+    Post.findOne({_id:req.body.id},(err,posts)=>{
+      if(!posts){
+        console.log(posts)
+        res.status(201).json({message:"faild to postfid"})
+      }else{
+        user.findOne({_id :req.userData.userId}, (err,finduser)=>{
+          //console.log("vt",finduser);
+          if(finduser._id == req.userData.userId){
+            posts.likescount++;
+            posts.likevalue.push(finduser._id);
+            //finduser.save();
+            posts.save((err)=>{
+              if(err){
+                res.status(201).json({message:"liked failed"})
+              }else{
+                res.status(200).json({message:"liked successFully"})
+              }
+            })
+          }
+          else{
+            res.status(201).json({message:"Cannot like your own post. "})
+          }
+        })
+        //console.log('vv',posts)
+          
+      }
+    })
+    
+
+  }
+exports.dislike = (req,res,next)=>{
+ /// console.log(Post,req.body.id)
+  Post.findOne({_id : req.body.id},(err, posts)=>{
+    if(!posts){
+     // console.log('vv',err)
+      res.status(201).json({message:"faild to postfid"})
+    }else{
+      user.findOne({_id :req.userData.userId}, (err,finduser)=>{
+       // console.log("vt1",finduser);
+        if(finduser._id == req.userData.userId){
+          posts.likescount--;
+          posts.likevalue.push(finduser._id);
+          //finduser.save();
+          posts.save((err)=>{
+            if(err){
+              res.status(201).json({message:"liked failed"})
+            }else{
+              res.status(200).json({message:"disliked successFully"})
+            }
+          })
+        }
+        else{
+          res.status(201).json({message:"Cannot like your own post. "})
+        }
+      })
+      //console.log('vv',posts)
+        
+    }
+  })
+ 
+
+}
 
   exports.getAllPosts = (req, res, next) => {
     const pageSize = +req.query.pagesize;

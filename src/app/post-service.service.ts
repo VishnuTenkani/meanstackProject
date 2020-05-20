@@ -26,7 +26,9 @@ export class PostsService {
             content:p.content,
             id:p._id,
             imagePath:p.imagePath,
-            creator:p.creator
+            creator:p.creator,
+            likeValue:p.likevalue,
+            likesCount:p.likescount
           }
         }),maxPosts:postData.maxPosts}
 
@@ -67,7 +69,7 @@ export class PostsService {
         this.router.navigate(["/"]);
       });
   }
-  updatePost(postId: string, title: string, content: string, image:File | string) {
+  updatePost(postId: string, title: string, content: string, image:File | string, likesCount:number) {
     let posted:Post | FormData;
     if(typeof(image) === "object"){
       posted= new FormData();
@@ -77,7 +79,7 @@ export class PostsService {
       posted.append("image",image,title)
 
     }else{
-       posted = { id: postId, title: title, content: content,imagePath:image,creator:null };
+       posted = { id: postId, title: title, content: content,imagePath:image,creator:null,likeValue:null,likesCount:likesCount };
     }
     this.http.put("http://localhost:3000/api/posts/" + postId, posted).subscribe((respone) => {
       // const updatedPosts = [...this.posts];
@@ -103,8 +105,18 @@ export class PostsService {
   }
 
   getPost(id: string) {
-    return this.http.get<{ _id: string; title: string; content: string,imagePath:string,creator:string }>(
+    return this.http.get<{ _id: string; title: string; content: string,imagePath:string,creator:string,likeValue:any,likesCount:number }>(
       "http://localhost:3000/api/posts/" + id
     );
+  }
+  likePost(id:string){
+    //const post:Post={id:id,title: null, content: null,imagePath:null,creator:null,likeValue:null}
+    const postId={id:id}
+    return this.http.put("http://localhost:3000/api/posts/", postId)
+  }
+  dislikePost(id:any){
+    //const post:Post={id:id,title: null, content: null,imagePath:null,creator:null,likeValue:null}
+    const dispostId={id:id}
+    return this.http.put("http://localhost:3000/api/dislike",dispostId )
   }
 }

@@ -43,12 +43,13 @@ export class PostCreateComponent implements OnInit {
         this.postId = paramMap.get("postId");
         this.postsService.getPost(this.postId).subscribe(postData => {
           this.isLoading = false;
-          this.post = {id: postData._id, title: postData.title, content: postData.content,imagePath:postData.imagePath, creator: postData.creator};
+          this.post = {id: postData._id, title: postData.title, content: postData.content,imagePath:postData.imagePath, creator: postData.creator,likeValue:postData.likeValue,likesCount:postData.likesCount};
           console.log(this.post);
           this.postForm.setValue({
             title:this.post.title,
             content:this.post.content,
-            image:this.post.imagePath
+            image:this.post.imagePath,
+            likesCount:this.post.likesCount
           })
          // this.imagePreview = this.post.imagePath;
           
@@ -87,6 +88,7 @@ export class PostCreateComponent implements OnInit {
         this.postForm.value.title,
         this.postForm.value.content,
         this.postForm.value.image,
+        this.post.likesCount
       );
     }
     //form.resetForm();

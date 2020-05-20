@@ -37,6 +37,8 @@ export class PostListComponent implements OnInit {
         this.isLoading= false;
         this.totalPosts=postsData.maxPostCout;
         this.posts = postsData.posts;
+        console.log(this.posts);
+        
       },err=>{
         console.log(err);
       });
@@ -44,6 +46,8 @@ export class PostListComponent implements OnInit {
       this.authListnerSubs = this.authSrv.getAuthStatusListner().subscribe((isAuth)=>{
         this.isUserAuthenticated = isAuth;
         this.userId = this.authSrv.getUserId();
+        
+        
       })
   }
 
@@ -71,7 +75,27 @@ export class PostListComponent implements OnInit {
     
   }
 
-  
+  likeActive:boolean=false;
+  toggleHeartLike(id){
+     this.likeActive = !this.likeActive;
+     if(this.likeActive){
+       this.addLikePost(id)
+     }else{
+       this.disLikepost(id)
+     }
+  }
+
+  addLikePost(id:string){
+    this.postServ.likePost(id).subscribe(()=>{
+      this.postServ.getPosts(this.postPerPage,this.currentPage);
+    })
+  }
+
+  disLikepost(id:string){
+    this.postServ.dislikePost(id).subscribe(()=>{
+      this.postServ.getPosts(this.postPerPage,this.currentPage);
+    })
+  }  
 
 
 }

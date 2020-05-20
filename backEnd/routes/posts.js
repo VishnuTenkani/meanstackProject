@@ -15,4 +15,7 @@ router.get("/api/posts", postControllerr.getAllPosts);
 
 router.delete("/api/posts/:id", checkAuth, postControllerr.deletePost);
 
+router.put("/api/posts/",checkAuth, postControllerr.like);
+router.put("/api/dislike/",checkAuth, postControllerr.dislike);
+
 module.exports = router;
