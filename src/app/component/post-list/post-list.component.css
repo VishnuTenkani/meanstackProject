@@ -64,3 +64,23 @@ mat-paginator {
   }
 }
 /* like button */
+:host {
+  display: block;
+  padding: 48px;
+}
+
+section:not(:last-of-type) {
+  margin-bottom: 24px;
+}
+
+
+.example-card {
+  width: 50rem;
+  margin: auto 2rem;
+  
+}
+
+.example-header-image {
+  background-image: url('../../../assets/imgs/user.png');
+  background-size: cover;
+}

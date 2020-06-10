@@ -5,6 +5,7 @@ const User = require("../model/user")
 exports.createUser = (req, res, next) => {
     bycrpt.hash(req.body.password, 10).then((hash) => {
         const user = new User({
+            userName: req.body.userName,
             email: req.body.email,
             password: hash
         })

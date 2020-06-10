@@ -1,59 +1,48 @@
 <mat-spinner strokeWidth="5" [diameter]="50" *ngIf="isLoading"></mat-spinner>
-<mat-accordion *ngIf="posts.length != 0 && !isLoading" #myaccordion>
-  <mat-expansion-panel *ngFor="let post of posts" [expanded]="isDisabled">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{ post.title }}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="post-image">
-      <img [src]="post.imagePath" [alt]="post.title" />
-    </div>
+<section *ngIf="posts.length != 0 && !isLoading">
+    <mat-card class="example-card" *ngFor="let post of posts">
+        <mat-card-header>
+            <div mat-card-avatar class="example-header-image"></div>
 
-    <div class="container">
-      <div>
-        <p>{{ post.content }}</p>
-      </div>
+            <mat-card-title>{{ post.title }}</mat-card-title>
 
-      <div *ngIf="userId !== post.creator">
-        <button
-          mat-button
-          mat-button
-          (click)="
-            toggleHeartLike(post.id, post.likeValue.indexOf(userId) > -1)
-          "
-          style="margin: 5px; text-align: center;"
-        >
-          <i
-            class="fa fa-heart size"
-            [ngStyle]="{
-              color: post.likeValue.indexOf(userId) > -1 ? 'red' : 'black'
-            }"
-          ></i>
-        </button>
-      </div>
-      <div>
-        <p>
-          <span matBadge="" matBadgeOverlap="false">
-            {{ post.likesCount == 0 ? "" : post.likesCount }}</span
-          >
-        </p>
-      </div>
-    </div>
-    <mat-action-row *ngIf="isUserAuthenticated && userId === post.creator">
-      <a mat-button color="primary" [routerLink]="['/edit', post.id]">Edit</a>
-      <button mat-button color="warn" (click)="onDelete(post.id)">
-        Delete
-      </button>
-    </mat-action-row>
-  </mat-expansion-panel>
-</mat-accordion>
-<mat-paginator
-  *ngIf="posts.length != 0"
-  [length]="totalPosts"
-  [pageSize]="postPerPage"
-  [pageSizeOptions]="pageSizeOptions"
-  (page)="onChangePageSize($event)"
->
+            <mat-card-subtitle>{{ post.creatorName != undefined ? post?.creatorName?.split("@")[0] : 'User'}}
+            </mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image [src]="post.imagePath" [alt]="post.title">
+
+        <mat-card-content>
+            <p>{{ post.content }}
+            </p>
+            <div *ngIf="!isLikeLoading">
+                <button mat-button mat-button *ngIf="userId !== post.creator" (click)="
+                        toggleHeartLike(post.id, post.likeValue.indexOf(userId) > -1)
+                      " style="margin: 5px; text-align: center;">
+                    <i class="fa fa-heart size" [ngStyle]="{
+                          color: post.likeValue.indexOf(userId) > -1 ? 'red' : 'black'
+                        }"></i>
+                </button>
+                <span>
+                    <span matBadge="" matBadgeOverlap="false">
+                        {{ post.likesCount == 1 ? "Like" : "Likes" }}
+                        {{ post.likesCount == 0 ? "" : post.likesCount }}</span>
+                </span>
+
+            </div>
+            <mat-spinner strokeWidth="3" [diameter]="20" *ngIf="isLikeLoading"></mat-spinner>
+            <div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions *ngIf="isUserAuthenticated && userId === post.creator">
+            <a mat-button color="primary" [routerLink]="['/edit', post.id]">Edit</a>
+            <button mat-button color="warn" (click)="onDelete(post.id)">
+                Delete
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</section>
+<mat-paginator *ngIf="posts.length != 0" [length]="totalPosts" [pageSize]="postPerPage"
+    [pageSizeOptions]="pageSizeOptions" (page)="onChangePageSize($event)">
 </mat-paginator>
 <p *ngIf="posts.length <= 0 && !isLoading" class="info-text">No posts found</p>

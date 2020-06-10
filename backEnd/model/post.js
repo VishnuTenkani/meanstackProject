@@ -5,6 +5,7 @@ const postSchema = mongose.Schema({
     content: { type: String, required: true },
     imagePath: { type: String, required: true },
     creator: { type: mongose.Schema.Types.ObjectId, ref: "User", required: true },
+    creatorName: { type: String, require: true },
     likescount: { type: Number, default: 0 },
     likevalue: { type: Array },
 

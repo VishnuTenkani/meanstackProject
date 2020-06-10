@@ -20,12 +20,13 @@ export class PostListComponent implements OnInit {
   userId: string;
   private authListnerSubs: Subscription;
   isDisabled = false;
+  isLikeLoading: boolean = false;
   @ViewChild("myaccordion", { static: true }) myPanels: MatAccordion;
   isUserAuthenticated = false;
   constructor(
     private postServ: PostsService,
     private authSrv: AuthServiceService
-  ) {}
+  ) { }
   posts: Post[] = [];
   private postsSub: Subscription;
   isLoading = false;
@@ -91,16 +92,20 @@ export class PostListComponent implements OnInit {
   }
 
   addLikePost(id: string) {
+    this.isLikeLoading = true;
     this.postServ.likePost(id).subscribe(() => {
       this.postServ.getPosts(this.postPerPage, this.currentPage);
+      this.isLikeLoading = false
       //this.isDisabled = true;
       //console.log(this.myPanels);
     });
   }
 
   disLikepost(id: string) {
+    this.isLikeLoading = true;
     this.postServ.dislikePost(id).subscribe(() => {
       this.postServ.getPosts(this.postPerPage, this.currentPage);
+      this.isLikeLoading = false;
     });
     //this.isDisabled = true;
   }

@@ -10,7 +10,7 @@ export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<{ posts: Post[]; maxPostCout: number }>();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) { }
 
   getPosts(postPerPage, currentPage) {
     let queryParam = `?pagesize=${postPerPage}&page=${currentPage}`;
@@ -30,6 +30,7 @@ export class PostsService {
                 creator: p.creator,
                 likeValue: p.likevalue,
                 likesCount: p.likescount,
+                creatorName: p.creatorName
               };
             }),
             maxPosts: postData.maxPosts,

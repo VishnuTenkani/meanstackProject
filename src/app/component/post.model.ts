@@ -6,5 +6,5 @@ export interface Post {
   creator: string;
   likeValue: any;
   likesCount: number;
-  likeValueBool?: boolean;
+  creatorName?: string;
 }
