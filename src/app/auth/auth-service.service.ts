@@ -12,8 +12,9 @@ export class AuthServiceService {
   private tokenTimer: any;
   private userId: string;
   private isLikeValue: any;
+  private userName: string;
   private authListner = new Subject<boolean>();
-  constructor(private http: HttpClient, private roter: Router) {}
+  constructor(private http: HttpClient, private roter: Router) { }
 
   createUser(email: string, password: string) {
     const authData: authModel = { email: email, password: password };
@@ -35,13 +36,14 @@ export class AuthServiceService {
         expiresIn: number;
         userId: string;
         likeValue: boolean;
+        userName: string;
       }>("http://localhost:3000/api/user/login", authData)
       .subscribe((Response) => {
         const token = Response.token;
         const expiresIntimer = Response.expiresIn;
         this.userId = Response.userId;
-        this.isLikeValue = Response.likeValue;
-        //console.log(this.userId);
+        this.userName = Response.userName;
+        console.log(this.userName);
 
         if (token) {
           this.getAuthTime(expiresIntimer);
@@ -53,7 +55,7 @@ export class AuthServiceService {
             token,
             expiresInDate,
             this.userId,
-            this.isLikeValue
+            this.userName
           );
           this.authListner.next(true);
           this.roter.navigate(["/"]);
@@ -86,6 +88,14 @@ export class AuthServiceService {
   getUserId() {
     return this.userId;
   }
+  getUserName() {
+    //console.log(this.userName);
+    const authData = this.getAuthData();
+    if (!authData) {
+      return
+    }
+    return this.userName = authData.userName;
+  }
 
   getToken() {
     return this.token;
@@ -94,6 +104,7 @@ export class AuthServiceService {
     this.token = null;
     this.isUserAuthenticated = false;
     this.userId = null;
+    this.userName = null;
     this.authListner.next(false);
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
@@ -104,12 +115,12 @@ export class AuthServiceService {
     token: string,
     expiresInDate: Date,
     userId: string,
-    likeValue: string
+    userName: string
   ) {
     localStorage.setItem("token", token);
     localStorage.setItem("expiresInDate", expiresInDate.toISOString());
     localStorage.setItem("userId", userId);
-    localStorage.setItem("isLikeValue", likeValue);
+    localStorage.setItem("userName", userName);
   }
   private clearAuthData() {
     localStorage.clear();
@@ -119,7 +130,7 @@ export class AuthServiceService {
     const token = localStorage.getItem("token");
     const expiresInDate = localStorage.getItem("expiresInDate");
     const userId = localStorage.getItem("userId");
-    const isLikeValue = localStorage.getItem("isLikeValue");
+    const userName = localStorage.getItem("userName");
     if (!token || !expiresInDate) {
       return;
     }
@@ -127,7 +138,7 @@ export class AuthServiceService {
       token: token,
       expiresInDate: new Date(expiresInDate),
       userId: userId,
-      isLikeValue: isLikeValue,
+      userName: userName,
     };
   }
   private getAuthTime(duration: number) {

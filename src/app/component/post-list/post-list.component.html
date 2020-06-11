@@ -4,9 +4,10 @@
         <mat-card-header>
             <div mat-card-avatar class="example-header-image"></div>
 
-            <mat-card-title>{{ post.title }}</mat-card-title>
+            <mat-card-title> {{ post.creatorName != undefined ? post?.creatorName?.split("@")[0] : 'User'}}
+            </mat-card-title>
 
-            <mat-card-subtitle>{{ post.creatorName != undefined ? post?.creatorName?.split("@")[0] : 'User'}}
+            <mat-card-subtitle>{{ post.title }}
             </mat-card-subtitle>
         </mat-card-header>
         <img mat-card-image [src]="post.imagePath" [alt]="post.title">
@@ -14,8 +15,8 @@
         <mat-card-content>
             <p>{{ post.content }}
             </p>
-            <div *ngIf="!isLikeLoading">
-                <button mat-button mat-button *ngIf="userId !== post.creator" (click)="
+            <div>
+                <button [disabled]="isLikeLoading" mat-button mat-button *ngIf="userId !== post.creator" (click)="
                         toggleHeartLike(post.id, post.likeValue.indexOf(userId) > -1)
                       " style="margin: 5px; text-align: center;">
                     <i class="fa fa-heart size" [ngStyle]="{
@@ -29,7 +30,7 @@
                 </span>
 
             </div>
-            <mat-spinner strokeWidth="3" [diameter]="20" *ngIf="isLikeLoading"></mat-spinner>
+            <!-- <mat-spinner strokeWidth="3" [diameter]="20" *ngIf="isLikeLoading"></mat-spinner> -->
             <div>
             </div>
         </mat-card-content>

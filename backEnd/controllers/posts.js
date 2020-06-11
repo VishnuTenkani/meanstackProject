@@ -6,7 +6,7 @@ exports.createPost = (req, res, next) => {
   let Loggeduser;
   user.findOne({ _id: req.userData.userId }, (err, finduser) => {
     Loggeduser = finduser;
-    console.log(Loggeduser);
+    //console.log(Loggeduser);
 
 
 
