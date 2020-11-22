@@ -3,6 +3,9 @@ import { HttpClient } from "@angular/common/http";
 import { authModel } from "./auth-model";
 import { Subject } from "rxjs";
 import { Router } from "@angular/router";
+import { environment } from '../../environments/environment'
+
+const apiUrl = environment.apiURL
 @Injectable({
   providedIn: "root",
 })
@@ -18,10 +21,10 @@ export class AuthServiceService {
 
   createUser(email: string, password: string) {
     const authData: authModel = { email: email, password: password };
-    this.http.post("http://localhost:3000/api/user/signup", authData).subscribe(
+    this.http.post(apiUrl + "/user/signup", authData).subscribe(
       (Response) => {
         //console.log(Response);
-        this.roter.navigate(["/"]);
+        this.roter.navigate(["/auth/login"]);
       },
       (err) => {
         console.log(err);
@@ -37,8 +40,9 @@ export class AuthServiceService {
         userId: string;
         likeValue: boolean;
         userName: string;
-      }>("http://localhost:3000/api/user/login", authData)
+      }>(apiUrl + "/user/login", authData)
       .subscribe((Response) => {
+        //console.log(Response);
         const token = Response.token;
         const expiresIntimer = Response.expiresIn;
         this.userId = Response.userId;
@@ -51,12 +55,7 @@ export class AuthServiceService {
           this.isUserAuthenticated = true;
           const now = new Date();
           const expiresInDate = new Date(now.getTime() + expiresIntimer * 1000);
-          this.saveAuthData(
-            token,
-            expiresInDate,
-            this.userId,
-            this.userName
-          );
+          this.saveAuthData(token, expiresInDate, this.userId, this.userName);
           this.authListner.next(true);
           this.roter.navigate(["/"]);
         }
@@ -92,9 +91,9 @@ export class AuthServiceService {
     //console.log(this.userName);
     const authData = this.getAuthData();
     if (!authData) {
-      return
+      return;
     }
-    return this.userName = authData.userName;
+    return (this.userName = authData.userName);
   }
 
   getToken() {

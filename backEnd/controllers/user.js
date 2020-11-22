@@ -27,7 +27,7 @@ exports.loginUser = (req, res, next) => {
     User.findOne({ email: req.body.email }).then((user) => {
         if (!user) {
             return res.status(401).json({
-                message: "Please login"
+                message: "invalid login"
             })
         }
         fectchedUser = user;
@@ -36,10 +36,10 @@ exports.loginUser = (req, res, next) => {
     }).then((result) => {
         if (!result) {
             return res.status(401).json({
-                message: "Please login"
+                message: "invalid login"
             })
         }
-        const token = jwt.sign({ email: fectchedUser.email, userId: fectchedUser._id }, "seceret_web_token_should_be_loger",
+        const token = jwt.sign({ email: fectchedUser.email, userId: fectchedUser._id }, process.env.JWT_KEY,
             { expiresIn: "1h" });
         res.status(200).json({
             message: "Auth successfuly!",
@@ -50,7 +50,7 @@ exports.loginUser = (req, res, next) => {
         })
     }).catch((err) => {
         return res.status(401).json({
-            message: "Please login"
+            message: "Invalid login"
         })
     });
 

@@ -1,0 +1,6 @@
+{
+    "env": {
+        "MONGO_ATLAS_PWD": "VK6IUduF4NLcFezJ",
+        "JWT_KEY": "seceret_web_token_should_be_loger"
+    }
+}

@@ -4,11 +4,13 @@ import { Subject } from "rxjs";
 import { Post } from "./component/post.model";
 import { map } from "rxjs/operators";
 import { Router } from "@angular/router";
+import { environment } from '../environments/environment'
 
 @Injectable({ providedIn: "root" })
 export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<{ posts: Post[]; maxPostCout: number }>();
+  apiUrl: any = environment.apiURL;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -16,7 +18,7 @@ export class PostsService {
     let queryParam = `?pagesize=${postPerPage}&page=${currentPage}`;
     this.http
       .get<{ message: string; post: any; maxPosts: number }>(
-        "http://localhost:3000/api/posts" + queryParam
+        this.apiUrl + "/posts" + queryParam
       )
       .pipe(
         map((postData) => {
@@ -30,7 +32,7 @@ export class PostsService {
                 creator: p.creator,
                 likeValue: p.likevalue,
                 likesCount: p.likescount,
-                creatorName: p.creatorName
+                creatorName: p.creatorName,
               };
             }),
             maxPosts: postData.maxPosts,
@@ -61,7 +63,7 @@ export class PostsService {
     postDate.append("image", image, title);
     this.http
       .post<{ message: string; post: Post }>(
-        "http://localhost:3000/api/posts",
+        this.apiUrl + "/posts",
         postDate
       )
       .subscribe((responseData) => {
@@ -105,7 +107,7 @@ export class PostsService {
       };
     }
     this.http
-      .put("http://localhost:3000/api/posts/" + postId, posted)
+      .put(this.apiUrl + "/posts" + postId, posted)
       .subscribe((respone) => {
         // const updatedPosts = [...this.posts];
         // const oldPostIndex = updatedPosts.findIndex(p => p.id == postId);
@@ -120,7 +122,7 @@ export class PostsService {
   }
 
   deletePost(postId: string) {
-    return this.http.delete("http://localhost:3000/api/posts/" + postId);
+    return this.http.delete(this.apiUrl + "/posts/" + postId);
     //  .subscribe(()=>{
     //  const updatedPosts = this.posts.filter(post =>post.id !== postId);
     //  this.posts = updatedPosts;
@@ -138,16 +140,16 @@ export class PostsService {
       creator: string;
       likeValue: any;
       likesCount: number;
-    }>("http://localhost:3000/api/posts/" + id);
+    }>(this.apiUrl + "/posts" + id);
   }
   likePost(id: string) {
     //const post:Post={id:id,title: null, content: null,imagePath:null,creator:null,likeValue:null}
     const postId = { id: id };
-    return this.http.put("http://localhost:3000/api/posts/", postId);
+    return this.http.put(this.apiUrl + "/posts", postId);
   }
   dislikePost(id: any) {
     //const post:Post={id:id,title: null, content: null,imagePath:null,creator:null,likeValue:null}
     const dispostId = { id: id };
-    return this.http.put("http://localhost:3000/api/dislike", dispostId);
+    return this.http.put(this.apiUrl + "/dislike", dispostId);
   }
 }

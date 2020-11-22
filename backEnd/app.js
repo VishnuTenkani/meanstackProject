@@ -8,18 +8,18 @@ const userRoutes = require("./routes/users")
 
 const app = express();
 
-mongoose.connect("mongodb+srv://Vishnu:VK6IUduF4NLcFezJ@mydb-fwqpd.mongodb.net/node-posts")
-.then(()=>{
+mongoose.connect("mongodb+srv://Vishnu:" + process.env.MONGO_ATLAS_PWD + "@mydb-fwqpd.mongodb.net/node-posts")
+  .then(() => {
     console.log("DataBase Connection Successfully")
-    
-}).catch(()=>{
+
+  }).catch(() => {
     console.log("DataBase Connection Failed!")
-    
-});
+
+  });
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/images",express.static(path.join("backEnd/images")));
+app.use("/images", express.static(path.join("backEnd/images")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -34,6 +34,6 @@ app.use((req, res, next) => {
   next();
 });
 app.use(postRoutes)
-app.use("/api/user",userRoutes)
+app.use("/api/user", userRoutes)
 
 module.exports = app;

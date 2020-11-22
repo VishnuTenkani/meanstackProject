@@ -1,27 +1,40 @@
-import { Component, OnInit, OnDestroy, AfterContentInit, AfterViewInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
-import { AuthServiceService } from 'src/app/auth/auth-service.service';
-import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterContentInit,
+  AfterViewInit,
+  AfterViewChecked,
+  ChangeDetectorRef,
+} from "@angular/core";
+import { AuthServiceService } from "src/app/auth/auth-service.service";
+import { Subscription } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
-  selector: 'app-post-header',
-  templateUrl: './post-header.component.html',
-  styleUrls: ['./post-header.component.css']
+  selector: "app-post-header",
+  templateUrl: "./post-header.component.html",
+  styleUrls: ["./post-header.component.css"],
 })
-export class PostHeaderComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class PostHeaderComponent
+  implements OnInit, AfterViewChecked, OnDestroy {
   private authListnerSubs: Subscription;
   isUserAuthenticated = false;
   userName: string = "";
-  constructor(private auth: AuthServiceService, private router: Router, private cdr: ChangeDetectorRef) { }
+  constructor(
+    private auth: AuthServiceService,
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.isUserAuthenticated = this.auth.getAuth();
 
-    this.authListnerSubs = this.auth.getAuthStatusListner().subscribe((isUserAuth) => {
-      this.isUserAuthenticated = isUserAuth;
-    })
-
-
+    this.authListnerSubs = this.auth
+      .getAuthStatusListner()
+      .subscribe((isUserAuth) => {
+        this.isUserAuthenticated = isUserAuth;
+      });
   }
 
   onLogout() {
@@ -34,8 +47,6 @@ export class PostHeaderComponent implements OnInit, AfterViewChecked, OnDestroy 
   ngAfterViewChecked() {
     this.userName = this.auth.getUserName();
     this.cdr.detectChanges();
-    //console.log(this.userName);
-
+    console.log(this.userName);
   }
-
 }
