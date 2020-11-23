@@ -13,12 +13,20 @@ and then switch to  database by using use command;
 ex: use <database name>
 run help in command prompt
 it will show you how to run command in schemas.
+--for angular material--
+npm --install --save @angular/material
+ng add @angular/material
+
+npm install --save express
+npm install --save body-parser
+npm install --save path
+npm install --save-dev nodemon
 
 for file upload in node js need to install package multer
 here command -- npm install --save multer
 
 for unique email id stores in db use the bellow 3rd party package
---npm install --save mongoose-unique-validator
+-- npm install --save mongoose-unique-validator
 
 
 for password encryption install bellow package--

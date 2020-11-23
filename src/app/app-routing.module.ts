@@ -7,15 +7,15 @@ import { AuthGuard } from './auth/auth.guard';
 
 
 const routes: Routes = [
-  { path: "", component: PostListComponent  },
-  { path: "create", component: PostCreateComponent,canActivate:[AuthGuard] },
-  { path: "edit/:postId", component: PostCreateComponent ,canActivate:[AuthGuard]},
-  {path:"auth", loadChildren : "./auth/auth/auth.module#AuthModule"}
+  { path: "", component: PostListComponent },
+  { path: "create", component: PostCreateComponent, canActivate: [AuthGuard] },
+  { path: "edit/:postId", component: PostCreateComponent, canActivate: [AuthGuard] },
+  { path: "auth", loadChildren: "./auth/auth/auth.module#AuthModule" }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers:[AuthGuard]
+  providers: [AuthGuard]
 })
 export class AppRoutingModule { }

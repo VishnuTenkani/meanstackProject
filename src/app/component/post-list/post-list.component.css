@@ -75,8 +75,8 @@ section:not(:last-of-type) {
 
 
 .example-card {
-  width: 50rem;
-  margin: auto 2rem;
+  margin: auto;
+  
   
 }
 

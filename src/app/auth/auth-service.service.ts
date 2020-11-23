@@ -88,7 +88,7 @@ export class AuthServiceService {
     return this.userId;
   }
   getUserName() {
-    //console.log(this.userName);
+
     const authData = this.getAuthData();
     if (!authData) {
       return;
